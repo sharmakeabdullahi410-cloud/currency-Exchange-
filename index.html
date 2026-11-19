@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Exchange</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0b1120;
+  color: #fff;
+}
+
+header {
+  background: #111c30;
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #26344b;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: bold;
+  color: #20d49a;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 16px;
+}
+
+h1 {
+  font-size: 27px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #9aa9bd;
+  margin-bottom: 25px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.card, .panel {
+  background: #142137;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #26344b;
+}
+
+.card p {
+  color: #9aa9bd;
+  font-size: 13px;
+}
+
+.card h2 {
+  color: #20d49a;
+  margin-top: 12px;
+}
+
+.panel {
+  margin-bottom: 20px;
+}
+
+.panel h3 {
+  margin-bottom: 18px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0 15px;
+  background: #0b1629;
+  color: white;
+  border: 1px solid #34445d;
+  border-radius: 7px;
+  outline: none;
+}
+
+button {
+  background: #16b981;
+  color: #061b16;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 7px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #20d49a;
+}
+
+.result {
+  color: #20d49a;
+  font-size: 23px;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #34445d;
+}
+
+th {
+  color: #20d49a;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 15px;
+}
+
+.plan {
+  background: #0b1629;
+  padding: 18px;
+  border-radius: 9px;
+  border: 1px solid #34445d;
+}
+
+.plan h2 {
+  color: #20d49a;
+  margin: 12px 0;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #8190a6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">CURRENCY EXCHANGE</div>
+  <nav>
+    <a href="#dashboard">Home</a>
+    <a href="#converter">Exchange</a>
+    <a href="#records">Records</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<section id="dashboard">
+<h1>Welcome to Currency Exchange</h1>
+<p class="subtitle">Your professional currency exchange management platform.</p>
+
+<div class="cards">
+  <div class="card">
+    <p>Total Transactions</p>
+    <h2 id="total">0</h2>
+  </div>
+  <div class="card">
+    <p>Total Profit (KES)</p>
+    <h2 id="profit">0</h2>
+  </div>
+  <div class="card">
+    <p>Transactions Today</p>
+    <h2 id="today">0</h2>
+  </div>
+</div>
+</section>
+
+<section class="panel" id="converter">
+<h3>Currency Converter</h3>
+
+<label>Amount</label>
+<input type="number" id="amount" placeholder="Enter amount">
+
+<label>From Currency</label>
+<select id="from">
+<option>USD</option>
+<option>KES</option>
+<option>EUR</option>
+<option>GBP</option>
+<option>TZS</option>
+<option>UGX</option>
+</select>
+
+<label>To Currency</label>
+<select id="to">
+<option>KES</option>
+<option>USD</option>
+<option>EUR</option>
+<option>GBP</option>
+<option>TZS</option>
+<option>UGX</option>
+</select>
+
+<label>Exchange Rate (units of target currency)</label>
+<input type="number" id="rate" placeholder="Enter exchange rate">
+
+<div class="result" id="result">Converted amount: 0</div>
+
+<button onclick="convert()">Calculate Exchange</button>
+<button onclick="saveTransaction()">Save Transaction</button>
+</section>
+
+<section class="panel" id="records">
+<h3>Exchange Records</h3>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Amount</th>
+<th>Exchange</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody id="recordsList"></tbody>
+</table>
+</div>
+</section>
+
+<section class="panel">
+<h3>Business Notes</h3>
+<textarea id="note" rows="4" placeholder="Write important transaction notes here..."></textarea>
+<button onclick="saveNote()">Save Note</button>
+<p id="noteStatus" style="color:#20d49a;margin-top:10px"></p>
+</section>
+
+<section class="panel">
+<h3>Communication Center</h3>
+<p style="color:#9aa9bd;margin-bottom:15px">
+Keep important business conversations and updates organized.
+</p>
+<textarea id="message" rows="3" placeholder="Write a message or business update..."></textarea>
+<button onclick="sendMessage()">Post Message</button>
+<div id="messages" style="margin-top:15px"></div>
+</section>
+
+<section class="panel">
+<h3>Choose Your Subscription</h3>
+
+<div class="plans">
+<div class="plan">
+<h3>Basic</h3>
+<h2>KSh 2,500</h2>
+<p>Essential exchange management.</p>
+</div>
+
+<div class="plan">
+<h3>Professional</h3>
+<h2>KSh 3,500</h2>
+<p>Advanced business management.</p>
+</div>
+
+<div class="plan">
+<h3>Business</h3>
+<h2>KSh 5,000</h2>
+<p>Complete business management.</p>
+</div>
+</div>
+
+<p style="margin-top:15px;color:#9aa9bd">
+Payment options: M-Pesa and Bank Transfer.
+</p>
+</section>
+
+</div>
+
+<footer>
+Currency Exchange © 2026 | Secure Business Management
+</footer>
+
+<script>
+let transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+let messages = JSON.parse(localStorage.getItem("messages") || "[]");
+
+let converted = 0;
+
+function convert() {
+  let amount = Number(document.getElementById("amount").value);
+  let rate = Number(document.getElementById("rate").value);
+
+  if(amount <= 0 || rate <= 0) {
+    alert("Enter a valid amount and exchange rate.");
+    return;
+  }
+
+  converted = amount * rate;
+
+  document.getElementById("result").innerText =
+    "Converted amount: " + converted.toLocaleString();
+}
+
+function saveTransaction() {
+  if(!converted) {
+    alert("Calculate the exchange first.");
+    return;
+  }
+
+  let amount = Number(document.getElementById("amount").value);
+  let from = document.getElementById("from").value;
+  let to = document.getElementById("to").value;
+
+  transactions.push({
+    date: new Date().toLocaleDateString(),
+    amount: amount,
+    exchange: from + " → " + to,
+    result: converted
+  });
+
+  localStorage.setItem("transactions",JSON.stringify(transactions));
+
+  converted = 0;
+  document.getElementById("result").innerText = "Transaction saved!";
+  document.getElementById("amount").value = "";
+  document.getElementById("rate").value = "";
+
+  updateDashboard();
+}
+
+function updateDashboard() {
+  document.getElementById("total").innerText = transactions.length;
+
+  let today = new Date().toLocaleDateString();
+  document.getElementById("today").innerText =
+    transactions.filter(t => t.date === today).length;
+
+  document.getElementById("profit").innerText = "0";
+
+  document.getElementById("recordsList").innerHTML =
+    transactions.map(t => `
+      <tr>
+        <td>${t.date}</td>
+        <td>${t.amount}</td>
+        <td>${t.exchange}</td>
+        <td>${t.result.toLocaleString()}</td>
+      </tr>
+    `).join("");
+}
+
+function saveNote() {
+  let note = document.getElementById("note").value;
+  localStorage.setItem("businessNote",note);
+  document.getElementById("noteStatus").innerText = "Note saved!";
+}
+
+function sendMessage() {
+  let message = document.getElementById("message").value.trim();
+
+  if(!message) return;
+
+  messages.push(message);
+  localStorage.setItem("messages",JSON.stringify(messages));
+
+  document.getElementById("message").value = "";
+  showMessages();
+}
+
+function showMessages() {
+  document.getElementById("messages").innerHTML =
+    messages.map(m => `<p style="padding:10px;border-bottom:1px solid #34445d">${m}</p>`).join("");
+}
+
+document.getElementById("note").value =
+  localStorage.getItem("businessNote") || "";
+
+updateDashboard();
+showMessages();
+</script>
+
+</body>
+</html>
